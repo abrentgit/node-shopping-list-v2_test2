@@ -21,7 +21,7 @@ ShoppingList.create('peppers', 4);
 // adding some recipes to `Recipes` so there's something
 // to retrieve.
 Recipes.create(
-  'boiled white rice', ['1 cup white rice', '2 cups water', 'pinch of salt']);
+  'boiled rice', ['1 cup white rice', '2 cups water', 'pinch of salt']);
 Recipes.create(
   'milkshake', ['2 tbsp cocoa', '2 cups vanilla ice cream', '1 cup milk']);
 
@@ -45,6 +45,24 @@ app.post('/shopping-list', jsonParser, (req, res) => {
 
   const item = ShoppingList.create(req.body.name, req.body.budget);
   res.status(201).json(item);
+});
+
+app.post('/recipes', jsonParser, (req, res) => {
+	const requiredFields = ['name', 'ingredients'];
+	for (let i = 0; i < requiredFields.length; i++) {
+		
+		const field = requiredFields[i];
+
+		if(!(field in req.body)) {
+		const message = `Missing \`${field}\` in request body`
+		console.log(message);
+		return res.status(400).send(message);
+	  }
+
+	}	
+
+	const item = Recipes.create(req.body.item, req.body.ingredients);
+	res.status(201).json(item);
 });
 
 
